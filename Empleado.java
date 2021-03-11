@@ -1,4 +1,6 @@
-public abstract class Empleado {
+package proyecto1;
+
+public abstract class Empleado extends Persona{
     String horario;
     double salario;
     int diasTrabajados;
@@ -6,6 +8,7 @@ public abstract class Empleado {
     public abstract double calcularSalario();
 
     public Empleado(String horario, double salario, int diasTrabajados) {
+        super(String nombre, String apellido, String identificacion, int edad);
         this.horario = horario;
         this.salario = salario;
         this.diasTrabajados = diasTrabajados;
