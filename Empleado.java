@@ -1,14 +1,14 @@
 package proyecto1;
 
 public abstract class Empleado extends Persona{
-    String horario;
-    double salario;
-    int diasTrabajados;
+    protected String horario;
+    protected double salario;
+    protected int diasTrabajados;
 
     public abstract double calcularSalario();
 
-    public Empleado(String horario, double salario, int diasTrabajados) {
-        super(String nombre, String apellido, String identificacion, int edad);
+    public Empleado(String nombre, String apellido, String identificacion, int edad, String horario, double salario, int diasTrabajados) {
+        super(nombre, apellido, identificacion, edad);
         this.horario = horario;
         this.salario = salario;
         this.diasTrabajados = diasTrabajados;
