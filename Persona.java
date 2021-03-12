@@ -1,4 +1,14 @@
-public abstract class Persona {
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Arrays;
+
+public abstract class Persona implements Serializable {
     protected String nombre;
     protected String apellido;
     protected String identificacion;
@@ -35,7 +45,34 @@ public abstract class Persona {
         }else
             throw new ENumeroNegativo();
     }
+    
+    public void escribirObjeto(String direccion) throws IOException  {
+		FileOutputStream f=new FileOutputStream(direccion);
+		ObjectOutputStream o= new ObjectOutputStream(f);
+		o.writeObject(this);
+		o.close();
+		f.close();
+	}
+    public Persona leerObjeto(File listF) throws IOException, ClassNotFoundException{
+		FileInputStream f= new FileInputStream(listF);
+		ObjectInputStream o=new ObjectInputStream(f);
+		return (Persona) o.readObject();
+	}
 
 
 
+}
+
+class Filtro implements FilenameFilter{
+	private String extension;
+	
+	public Filtro(String extension) {
+		super();
+		this.extension=extension;
+	}
+	
+	public boolean accept(File ruta, String file) {
+		return file.endsWith(extension);
+		
+	}
 }
