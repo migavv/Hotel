@@ -4,9 +4,16 @@ class ENoElemento extends Exception{
   }
 }
 
+class NoExisteEmpleadoException extends Exception{
+    public NoExisteEmpleadoException(){
+        super("No se encontró el empleado");
+    }
+}
+
 public class Administracion{
   
-  Cliente[] clientes;
+  private Cliente[] clientes;
+  private Empleado[] empleados;
   
   public buscarHabitacion(String codigoHabitacion){
     int n=0;
@@ -38,7 +45,49 @@ public class Administracion{
 			pers[i].leerObjeto(listF[i]);
 		}
 		return pers;
-		}
+	}
+	
+	public boolean existeEmpleado(String cedula){
+        	boolean existe = false;
+        	int i = 0;
+        	while(i < empleados.length - 1){
+            		if (empleados[i].getCedula.equals(cedula)){
+                		existe = true;
+                		break;
+            		}
+            		i++;
+        	}
+        	return existe;
+    	}
+	
+	public Empleado buscarEmpleado(String cedula) throws NoExisteEmpleadoException{
+        	if(!existeEmpleado(cedula)){
+            		throw new NoExisteEmpleadoException();
+        	}
+        	Empleado empleado = null;
+        	int i = 0;
+        	while(i < empleados.length - 1){
+            		if (empleados[i].getCedula.equals(cedula)){
+                		empleado = empleados[i];
+                		break;
+            		}
+        	}
+        	return empleado;
+    	}
+	
+	public void eliminarEmpleado(String cedula) throws NoExisteEmpleadoException{
+        	if(!existeEmpleado(cedula))   {
+            		throw new NoExisteEmpleadoException();
+        	}
+        	Empleado[] restantes = Arrays.copyOf(empleados, empleados.length - 1);
+        	for(int i = 0, j = 0; i < empleados.length; i++){
+            		if(empleados[i].getCedula != cedula){
+                	restantes[j] = empleados[i];
+                	j++;
+            		}
+        	}
+        	empleados = restantes;
+    	}
 }
 
   
