@@ -1,8 +1,10 @@
-public class Aseo extends Empleado{
-    Habitacion[] habitaciones;
+package proyecto1;
 
-    public Aseo(String horario, double salario, int diasTrabajados, Habitacion[] habitaciones) {
-        super(horario, salario, diasTrabajados);
+public class Aseo extends Empleado{
+    private Habitacion[] habitaciones;
+
+    public Aseo(String nombre, String apellido, String identificacion, int edad, String horario, double salario, int diasTrabajados, Habitacion[] habitaciones) {
+        super(nombre, apellido, identificacion, edad, horario, salario, diasTrabajados);
         this.habitaciones = habitaciones;
     }
 
