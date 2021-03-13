@@ -1,7 +1,8 @@
-package proyecto1;
+
 
 public class Aseo extends Empleado{
     private Habitacion[] habitaciones;
+    private int habitacionLimpiadas;
 
     public Aseo(String nombre, String apellido, String identificacion, int edad, String horario, double salario, int diasTrabajados, Habitacion[] habitaciones) {
         super(nombre, apellido, identificacion, edad, horario, salario, diasTrabajados);
@@ -13,9 +14,9 @@ public class Aseo extends Empleado{
         return salario * (1.25);
     }
 
-    public void limpieza(int numero){
-        habitaciones[numero].setLimpia(true);
-    }
+    //public void limpieza(int numero){
+        //habitaciones[numero].setLimpia(true);
+    //}
 
     public Habitacion[] getHabitaciones() {
         return habitaciones;
