@@ -16,19 +16,19 @@ class NoExisteEmpleadoException extends Exception{
     }
 }
 
-class noExisteReserva extends Exception {
+class NoExisteReserva extends Exception {
 	public noExisteReserva() {
 		super(" No Existe la reserva");
 	}
 }
 
-class noSeEncuentraReserva extends Exception {
+class NoSeEncuentraReserva extends Exception {
 	public noSeEncuentraReserva() {
 		super(" No se encuentra la reserva");
 	}
 }
 
-class yaExisteReserva extends Exception {
+class YaExisteReserva extends Exception {
 	public yaExisteReserva() {
 		super(" Ya existe la reserva");
 	}
@@ -39,18 +39,21 @@ public class Administracion{
   private Cliente[] clientes;
   private Empleado[] empleados;
   private Reserva reservas[];
+	private Habitacion[] habitaciones;
+	private double cuenta;
   
-  public buscarHabitacion(String codigoHabitacion){
+  public buscarHabitacion(String codigoHabitacion) throws ENoElemento{
     int n=0;
     boolean b=false;
     while(n<habitaciones.length&&!b){
       if(habitaciones[n].getCodigo.equals(codigoHabitacion))
-        return habitaciones[n];
+        return habitaciones[n];}
+	  n++;
     }
     throw new ENoElemento();
   }
   
-  public boolean existeHabitacion(String codigoHabitacion){
+  public boolean existeHabitacion(String codigoHabitacion) throws ENoElemento{
     if(buscarHabitacion(codigoHabitacion)==null)
       return false;
     else
@@ -63,13 +66,12 @@ public class Administracion{
 		}
 	}
 	
-	public Persona[] leerObjetos(File f) throws ClassNotFoundException, IOException {
+	public void leerObjetos(File f) throws ClassNotFoundException, IOException {
 		File[] listF=f.listFiles(new Filtro(".clt"));
-		Persona[] pers= new Persona[listF.length];
-		for (int i = 0; i < pers.length; i++) {
-			pers[i].leerObjeto(listF[i]);
+		for (int i = 0; i < listF.length; i++) {
+			clientes=Arrays.copyOf(clientes, clientes.lenght+1);
+			clientes[clientes.length-1].leerObjeto(listF[i]);
 		}
-		return pers;
 	}
 	
 	public boolean existeEmpleado(String cedula){
@@ -114,21 +116,21 @@ public class Administracion{
         	empleados = restantes;
     	}
 	
-	public boolean existeReserva(String codigoReserva) throws noExisteReserva {
+	public boolean existeReserva(String codigoReserva) throws NoExisteReserva {
 		int i = 0;
-		while (i < reservas.length && !codigoReserva.equals(reservas[i].getCodigoReserva())) {
+		boolean b=false;
+		while (i < reservas.length && !b) {
+			if(reservas.getCodigo.equals(codigoReserva))
+				return true;
 			i++;
 		}
-		if (codigoReserva.equals(reservas[i].getCodigoReserva())) {
-			return true;
-		} else {
-			throw new noExisteReserva();
-		}
+		throw new NoExisteRerserva();
+		
 	}
-
-	public Reserva buscarReserva(String codigoReserva) throws noSeEncuentraReserva, noExisteReserva {
+// REVISAR
+	public Reserva buscarReserva(String codigoReserva) throws NoSeEncuentraReserva, NoExisteReserva {
 		int i = 0;
-		if (existeReserva(codigoReserva) == true) {
+		if (existeReserva(codigoReserva)) {
 			while (i < reservas.length && !codigoReserva.equals(reservas[i].getCodigoReserva())) {
 				i++;
 			}
@@ -137,26 +139,18 @@ public class Administracion{
 			throw new noSeEncuentraReserva();
 		}
 	}
-
+//.
 	public void addReserva(String codigo, String cedulaCliente, String plan, Date fechaInicio, Date fechaFinal,
-			String codigoEmpleado) throws yaExisteReserva, noExisteReserva {
+			String codigoEmpleado) throws YaExisteReserva, NoExisteReserva {
 
-		if (existeReserva(codigo) == true) {
-			throw new yaExisteReserva();
+		if (existeReserva(codigo)) {
+			throw new YaExisteReserva();
 		} else {
-			System.arraycopy(reservas, 0, reservas, 0, reservas.length + 1);
-			Reserva r = new Reserva();
-			reservas[reservas.length] = r;
-			r.setCedulaCliente(cedulaCliente);
-			r.setCodigoEmpleado(codigoEmpleado);
-			r.setFechaInicio(fechaInicio);
-			r.setFechaFinal(fechaFinal);
-			r.setPlan(plan);
-
+			reservas=Arrays.copyOf(reservas, reservas.length+1);
+			reservas[reservas.length-1]=new Reserva(cedulaCliente, codigoEmpleado, fechaInicio, fechaFinal, plan);
 		}
-
 	}
-
+//
 	public void eliminarReserva(String codigoReserva) throws noExisteReserva {
 		Reserva aux;
 		int i = 0;
@@ -172,7 +166,7 @@ public class Administracion{
 			throw new noExisteReserva();
 		}
 	}
-	
+//
 	public void imprimirReserva(String direccion, String codigo) throws IOException, noExisteReserva, noSeEncuentraReserva {
 		
 		FileWriter fw = new FileWriter(direccion);
@@ -184,5 +178,6 @@ public class Administracion{
 		pw.close();
 	}
 }
+//
 
   
