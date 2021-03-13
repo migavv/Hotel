@@ -1,3 +1,9 @@
+class ECodigoInvalido extends Exception{
+    ECodigoInvalido(){
+        super("El codigo ingresado es erroneo");
+}
+
+
 private String codigoReserva;
     private String cedulaCliente;
     private Date fechaInicio;
@@ -6,7 +12,7 @@ private String codigoReserva;
     String codigoEmpleado;
     private String codigoHabitaciones[];
 
-    public reserva(String cedula, String codigo, Date fechaInicio, Date fechaFinal, Stirng plan) {
+    public reserva(String cedula, String codigo, Date fechaInicio, Date fechaFinal, String plan) {
         this.cedula = cedula;
         this.codigo = codigo;
         this.fechaInicio = fechaInicio;
@@ -18,17 +24,12 @@ private String codigoReserva;
         return codigoReserva;
     }
 
-    public void setCodigoReserva(String codigoReserva) {
-        this.codigoReserva = codigoReserva;
-    }
-}
+    
+
     public String getCedulaCliente() {
         return cedulaCliente;
     }
 
-    public void setCedulaCliente(String cedulaCliente) {
-        this.cedulaCliente = cedulaCliente;
-    }
 
     public Date getFechaInicio() {
         return fechaInicio;
@@ -42,9 +43,7 @@ private String codigoReserva;
         return codigoHabitaciones;
     }
 
-    public void setCodigoHabitaciones(String[] codigoHabitaciones) {
-        this.codigoHabitaciones = codigoHabitaciones;
-    }
+    
 
     public Date getFechaFinal() {
         return fechaFinal;
@@ -66,6 +65,29 @@ private String codigoReserva;
         return codigoEmpleado;
     }
 
-    public void setCodigoEmpleado(String codigoEmpleado) {
-        this.codigoEmpleado = codigoEmpleado;
+    public void cambiarHabitaciones(String codigoHabitacionN,String codigoHabitacionV)throws ECodigoInvalido{
+        boolean b=false;
+        int n=0;
+        while(n<codigoHabitaciones.length&&!b){
+            if(codigoHabitaciones[n].equals(codigoHabitacionV)){
+                b=true;
+                codigoHabitaciones[n]=codigoHabitacionN;
+            }  
+        }
+        if(!b)
+            throw new ECodigoInvalido();
     }
+    public void eliminarHabitacion(String codigoHabitacion) throws ECodigoInvalido{
+        boolean b=false;
+        int n=0;
+        while(n<codigoHabitaciones.length&&!b) {
+            if(codigoHabitaciones[n].equals(codigoHabitacion)){
+                b=true;
+                System.arraycopy(codigoHabitaciones,n+1,codigoHabitaciones, n,codigoHabitaciones.length-n-1);
+                codigoHabitaciones=Arrays.copyOf(codigoHabitaciones,codigoHabitaciones.length-1);
+            }
+        }
+        if(b!)
+            throw new ECodigoInvalido();
+    }
+        
