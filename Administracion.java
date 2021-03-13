@@ -180,4 +180,102 @@ public class Administracion{
 }
 //
 
+class noExisteReseña extends Exception {
+	
+	public noExisteReseña() {
+		super(" No Existe la reseña");
+	}
+}
+
+class noSeEncuentraReseña extends Exception {
+
+
+	public noSeEncuentraReseña() {
+		super(" No se encuentra la reseña");
+	}
+}
+
+class yaExisteReseña extends Exception {
+	public yaExisteReseña() {
+		super(" Ya existe la reserva");
+	}
+}
+
+public class main {
+
+	Reseña reseñas[];
+
+	public boolean existeReseña(String CodigoCliente) throws noExisteReseña {
+		int i=0;
+		
+		for (int i1=0;i1 < reseñas.length && CodigoCliente.equals(reseñas[i1].getCodigoCliente());i1++) {
+			i++;
+		}
+		if (CodigoCliente.equals(reseñas[i].getCodigoCliente())) {
+			return true;
+		} else {
+			throw  new noExisteReseña();
+		}
+	}
+
+	public Reseña buscarReseña(String codigoCliente) throws noSeEncuentraReseña, noExisteReseña {
+		int i = 0;
+		if (existeReseña(codigoCliente) == true) {
+			while (i < reseñas.length && !codigoCliente.equals(reseñas[i].getCodigoCliente())) {
+				i++;
+			}
+			return reseñas[i];
+		} else {
+			throw new noSeEncuentraReseña();
+		}
+	}
+
+	public void addReseña( String descripcion,Date fecha,int calificacion,String codigoCliente) throws yaExisteReseña, noExisteReseña {
+
+		if (existeReseña(codigoCliente) == true) {
+			throw new yaExisteReseña();
+		} else {
+			System.arraycopy(reseñas, 0, reseñas, 0, reseñas.length + 1);
+			Reseña r = new Reseña(codigoCliente, fecha, calificacion, codigoCliente);
+			reseñas[reseñas.length] = r;
+			r.setDescripcion(descripcion);
+			r.setFecha(fecha);
+			r.setCalificacion(calificacion);
+			r.setCodigoCliente(codigoCliente);
+			
+		}
+
+	}
+
+	public void eliminarReseña(String codigoCliente) throws noExisteReseña {
+		Reseña aux;
+		int i = 0;
+		while (i < reseñas.length && !codigoCliente.equalsIgnoreCase(reseñas[i].getCodigoCliente())) {
+			i++;
+		}
+		if (codigoCliente.equalsIgnoreCase(reseñas[i].getCodigoCliente())) {
+			aux = reseñas[i];
+			reseñas[i] = reseñas[reseñas.length-1];
+			reseñas[reseñas.length] = aux;
+			System.arraycopy(reseñas, 0, reseñas, 0, reseñas.length - 1);
+		} else {
+			throw new noExisteReseña();
+		}
+	}
+	
+	public void imprimirReserva(String direccion, String codigo) throws IOException, noExisteReseña, noSeEncuentraReseña {
+		
+		FileWriter fw = new FileWriter(direccion);
+		PrintWriter pw = new PrintWriter(fw);
+		
+		if(existeReseña(codigo)==true) {
+			pw.print(buscarReseña(codigo));
+		}
+		pw.close();
+	}
+
+
+
+}
+
   
