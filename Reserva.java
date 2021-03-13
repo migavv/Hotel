@@ -6,6 +6,14 @@ private String codigoReserva;
     String codigoEmpleado;
     private String codigoHabitaciones[];
 
+    public reserva(String cedula, String codigo, Date fechaInicio, Date fechaFinal, Stirng plan) {
+        this.cedula = cedula;
+        this.codigo = codigo;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.plan = plan;
+    }
+
     public String getCodigoReserva() {
         return codigoReserva;
     }
