@@ -25,7 +25,7 @@ public class Habitacion {
             this.disponible = disponible;
             this.limpia = limpia;
             precioNoche=400+numeroMaxCliente*20;
-        }else if(numeroMaxCliente==3||numeroMaxCliente>6)
+        }else if(numeroMaxCliente<3||numeroMaxCliente>6)
             throw new ENumeroNoPermitido();
         else
             throw new ENumeroNegativo();
