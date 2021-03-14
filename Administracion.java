@@ -4,6 +4,24 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 
+class NoExisteReseña extends Exception {
+	public NoExisteReseña() {
+		super(" No Existe la reseña");
+	}
+}
+
+class NoSeEncuentraReseña extends Exception {
+	public NoSeEncuentraReseña() {
+		super(" No se encuentra la reseña");
+	}
+}
+
+class NoExisteReseña extends Exception {
+	public NoExisteReseña() {
+		super(" Ya existe la reserva");
+	}
+}
+
 class ENoElemento extends Exception{
   ENoElemento(){
     super("No se encuentra el elemento buscado");
@@ -60,13 +78,13 @@ public class Administracion{
       return true;
   }
 	
-	public void escribirObjeto(String direccion) throws IOException {
+	public void escribirObjetoC(String direccion) throws IOException {
 		for (int i = 0; i < clientes.length; i++) {
 			clientes[i].escribirObjeto(direccion+"\\" + personas[i].getNombre+".clt");
 		}
 	}
 	
-	public void leerObjetos(File f) throws ClassNotFoundException, IOException {
+	public void leerObjetosC(File f) throws ClassNotFoundException, IOException {
 		File[] listF=f.listFiles(new Filtro(".clt"));
 		for (int i = 0; i < listF.length; i++) {
 			clientes=Arrays.copyOf(clientes, clientes.lenght+1);
@@ -101,7 +119,7 @@ public class Administracion{
         	}
         	return empleado;
     	}
-	
+	//
 	public void eliminarEmpleado(String cedula) throws NoExisteEmpleadoException{
         	if(!existeEmpleado(cedula))   {
             		throw new NoExisteEmpleadoException();
@@ -127,22 +145,21 @@ public class Administracion{
 		throw new NoExisteRerserva();
 		
 	}
-// REVISAR
+
 	public Reserva buscarReserva(String codigoReserva) throws NoSeEncuentraReserva, NoExisteReserva {
 		int i = 0;
 		if (existeReserva(codigoReserva)) {
 			while (i < reservas.length && !codigoReserva.equals(reservas[i].getCodigoReserva())) {
-				i++;
-			}
-			return reservas[i];
+				return reservas[i];
+				i++;	
+			}	
 		} else {
-			throw new noSeEncuentraReserva();
+			throw new NoSeEncuentraReserva();
 		}
 	}
 //.
 	public void addReserva(String codigo, String cedulaCliente, String plan, Date fechaInicio, Date fechaFinal,
-			String codigoEmpleado) throws YaExisteReserva, NoExisteReserva {
-
+			String codigoEmpleado) throws YaExisteReserva {
 		if (existeReserva(codigo)) {
 			throw new YaExisteReserva();
 		} else {
@@ -150,129 +167,88 @@ public class Administracion{
 			reservas[reservas.length-1]=new Reserva(cedulaCliente, codigoEmpleado, fechaInicio, fechaFinal, plan);
 		}
 	}
-//
-	public void eliminarReserva(String codigoReserva) throws noExisteReserva {
-		Reserva aux;
+	public void eliminarReserva(String codigoReserva) throws NoExisteReserva {
 		int i = 0;
+		if(!existeReserva(codigoReserva))
+			throw new NoExisteReserva();
 		while (i < reservas.length && !codigoReserva.equalsIgnoreCase(reservas[i].getCodigoReserva())) {
 			i++;
 		}
-		if (codigoReserva.equalsIgnoreCase(reservas[i].getCodigoReserva())) {
-			aux = reservas[i];
-			reservas[i] = reservas[reservas.length];
-			reservas[reservas.length] = aux;
-			System.arraycopy(reservas, 0, reservas, 0, reservas.length - 1);
-		} else {
-			throw new noExisteReserva();
-		}
+		if(codigoReserva.equalsIgnoreCase(reservas[i].getCodigoReserva())){
+				System.arraycopy(reservas,i+1,reservas,i,reservas.length-1-i);
+				reservas=Arrays.copyOf(reservas,reservas.length-1);
+			}
 	}
-//
-	public void imprimirReserva(String direccion, String codigo) throws IOException, noExisteReserva, noSeEncuentraReserva {
-		
-		FileWriter fw = new FileWriter(direccion);
-		PrintWriter pw = new PrintWriter(fw);
-		
-		if(existeReserva(codigo)==true) {
-			pw.print(buscarReserva(codigo));
-		}
-		pw.close();
-	}
-}
-//
-
-class noExisteReseña extends Exception {
 	
-	public noExisteReseña() {
-		super(" No Existe la reseña");
+
+public void escribirObjetoR(String direccion) throws IOException {
+		for (int i = 0; i < reservas.length; i++) {
+			reservas[i].escribirObjeto(direccion+"\\" + reservas[i].getCodigoReserva+".rss");
+		}
 	}
-}
-
-class noSeEncuentraReseña extends Exception {
-
-
-	public noSeEncuentraReseña() {
-		super(" No se encuentra la reseña");
+	
+	public void leerObjetosR(File f) throws ClassNotFoundException, IOException {
+		File[] listF=f.listFiles(new Filtro(".rss"));
+		for (int i = 0; i < listF.length; i++) {
+			reservas=Arrays.copyOf(reservas, reservas.lenght+1);
+			reservas[reservas.length-1].leerObjeto(listF[i]);
+		}
 	}
-}
 
-class yaExisteReseña extends Exception {
-	public yaExisteReseña() {
-		super(" Ya existe la reserva");
-	}
-}
-
-public class main {
-
-	Reseña reseñas[];
-
-	public boolean existeReseña(String CodigoCliente) throws noExisteReseña {
+	public boolean existeReseña(String codigoCliente) throws NoExisteReseña {
 		int i=0;
-		
-		for (int i1=0;i1 < reseñas.length && CodigoCliente.equals(reseñas[i1].getCodigoCliente());i1++) {
-			i++;
+		boolean b=false;
+		while(i<reseñas.lenght&&!b){
+			if(reseñas[i].getCodigoCliente().equals(codigoCliente)){
+				return true;
+			}
 		}
-		if (CodigoCliente.equals(reseñas[i].getCodigoCliente())) {
-			return true;
-		} else {
-			throw  new noExisteReseña();
-		}
+		return b;
 	}
 
-	public Reseña buscarReseña(String codigoCliente) throws noSeEncuentraReseña, noExisteReseña {
+	public Reseña buscarReseña(String codigoCliente) throws NoSeEncuentraReseña, NoExisteReseña {
 		int i = 0;
-		if (existeReseña(codigoCliente) == true) {
+		if (existeReseña(codigoCliente)) {
 			while (i < reseñas.length && !codigoCliente.equals(reseñas[i].getCodigoCliente())) {
 				i++;
 			}
-			return reseñas[i];
+			return reseñas[i-1];
 		} else {
-			throw new noSeEncuentraReseña();
+			throw new NoSeEncuentraReseña();
 		}
 	}
 
-	public void addReseña( String descripcion,Date fecha,int calificacion,String codigoCliente) throws yaExisteReseña, noExisteReseña {
-
-		if (existeReseña(codigoCliente) == true) {
+	public void addReseña( String descripcion,Date fecha,int calificacion,String codigoCliente) throws YaExisteReseña, NoExisteReseña {
+		if (existeReseña(codigoCliente)) {
 			throw new yaExisteReseña();
 		} else {
-			System.arraycopy(reseñas, 0, reseñas, 0, reseñas.length + 1);
-			Reseña r = new Reseña(codigoCliente, fecha, calificacion, codigoCliente);
-			reseñas[reseñas.length] = r;
-			r.setDescripcion(descripcion);
-			r.setFecha(fecha);
-			r.setCalificacion(calificacion);
-			r.setCodigoCliente(codigoCliente);
-			
+			reseñas=Arrays.copyOf(reseñas,reseñas.length+1);
+			reseñas[reseñas.length-1]=new Reseña(descripcion,fecha,calificacion,codigoCliente);
 		}
-
 	}
 
-	public void eliminarReseña(String codigoCliente) throws noExisteReseña {
-		Reseña aux;
+	public void eliminarReseña(String codigoCliente) throws NoExisteReseña {
 		int i = 0;
 		while (i < reseñas.length && !codigoCliente.equalsIgnoreCase(reseñas[i].getCodigoCliente())) {
 			i++;
 		}
 		if (codigoCliente.equalsIgnoreCase(reseñas[i].getCodigoCliente())) {
-			aux = reseñas[i];
-			reseñas[i] = reseñas[reseñas.length-1];
-			reseñas[reseñas.length] = aux;
-			System.arraycopy(reseñas, 0, reseñas, 0, reseñas.length - 1);
+			System.arraycopy(reseñas,i+1,reseñas,i,reseñas.length-1-i);
+			reseñas=Arrays.copyOf(reseñas,reseñas.length-1);
 		} else {
-			throw new noExisteReseña();
+			throw new NoExisteReseña();
 		}
 	}
 	
-	public void imprimirReserva(String direccion, String codigo) throws IOException, noExisteReseña, noSeEncuentraReseña {
-		
-		FileWriter fw = new FileWriter(direccion);
-		PrintWriter pw = new PrintWriter(fw);
-		
-		if(existeReseña(codigo)==true) {
-			pw.print(buscarReseña(codigo));
+	public void escribirFicheroReseña(String dirreccion){
+		for(Reseña r:reseñas){
+			r.escrbirFichero(dirreccion+r.getCodigoCliente());
 		}
-		pw.close();
 	}
+	
+	
+
+
 
 
 
