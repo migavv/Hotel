@@ -35,19 +35,19 @@ class NoExisteEmpleadoException extends Exception{
 }
 
 class NoExisteReserva extends Exception {
-	public noExisteReserva() {
+	public NoExisteReserva() {
 		super(" No Existe la reserva");
 	}
 }
 
 class NoSeEncuentraReserva extends Exception {
-	public noSeEncuentraReserva() {
+	public NoSeEncuentraReserva() {
 		super(" No se encuentra la reserva");
 	}
 }
 
 class YaExisteReserva extends Exception {
-	public yaExisteReserva() {
+	public NaExisteReserva() {
 		super(" Ya existe la reserva");
 	}
 }
@@ -77,6 +77,38 @@ public class Administracion{
     else
       return true;
   }
+
+public boolean existeCliente(String identificacion){
+	int n=0;
+	boolean b=false;
+	while(n<clientes.length&&!b){
+		if(clientes[n].getIdentificacion.equals(identificacion))
+			return true;
+		n++;
+	}
+	return b;
+}
+public void addCliente(String codigoHabitacion, String nombre, String apellido, String identificacion, int edad) throws EClienteYaExiste {
+	if(existeCliente(identificacion)){
+		throw new EClienteYaExiste();
+	}else{
+		clientes=Arrays.copyOf(clientes,clientes.length+1);
+		clientes[clientes.length-1]=new Cliente(codigoHabitacion, nombre, apellido,identificacion, edad);
+	}
+}
+
+public Cliente buscarCliente(String identificacion) throws EClienteNoExiste{
+	if(!existeCliente(identificacion)){
+		throw new EClienteNoExiste();
+	}else{
+		int n=0;
+		while(n<clientes.length){
+			if(clientes[n].getIdentificacion.equals(identificacion))
+				return clientes[n];
+			n++;
+		}
+	}
+}
 	
 	public void escribirObjetoC(String direccion) throws IOException {
 		for (int i = 0; i < clientes.length; i++) {
