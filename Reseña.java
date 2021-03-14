@@ -30,5 +30,22 @@ public class Reseña {
                     this.codigoCliente=codigoCliente;
 
     }
+    
+    public void escribirObjeto(String direccion) throws IOException{
+		FileOutputStream f=new FileOutputStream(direccion);
+		ObjectOutputStream o =new ObjectOutputStream(f);
+		o.writeObject(this);
+		o.close();
+		f.close();
+		
+	}
+    
+    public Reseña leerObjeto(File listF) throws OptionalDataException,ClassNotFoundException,IOException{
+		FileInputStream f= new FileInputStream(listF);
+		ObjectInputStream o=new ObjectInputStream(f);
+		return (Estudiantes) o.readObject();
+		
+		
+	}
 
 }
