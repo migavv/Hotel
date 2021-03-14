@@ -31,21 +31,38 @@ public class Reseña {
 
     }
     
-    public void escribirObjeto(String direccion) throws IOException{
-		FileOutputStream f=new FileOutputStream(direccion);
-		ObjectOutputStream o =new ObjectOutputStream(f);
-		o.writeObject(this);
-		o.close();
-		f.close();
-		
+    public void escribirFichero(String direccion) throws IOException, FileNotFoundException {
+		if(direccion!=null) {
+			FileWriter fw=null;
+			BufferedWriter b=null;
+			fw= new FileWriter(direccion);
+			b.write("Codigo Cliente:"+codigoCliente);
+			b.write("Descripcion:"+descripcion);
+			b.write("Calificacion:"+ calificacion);
+			b.write("Fecha:"+fecha);
+			b.close();
+			fw.close();			}
+		}else
+			throw new FileNotFoundException();	
 	}
-    
-    public Reseña leerObjeto(File listF) throws OptionalDataException,ClassNotFoundException,IOException{
-		FileInputStream f= new FileInputStream(listF);
-		ObjectInputStream o=new ObjectInputStream(f);
-		return (Estudiantes) o.readObject();
-		
-		
+
+	public void leerFichero(String direccion) throws FileNotFoundException, IOException{
+		if(direccion!=null) {
+			File f=new File(direccion);
+			FileReader fr= null;
+			BufferedReader b1=null;
+			fr=new FileReader(f);
+			b1=new BufferedReader(fr);
+			String linea;
+			while((linea=b1.readLine())!=null) {
+				System.out.println(linea);
+			}	
+		}else
+			throw new FileNotFoundException();
 	}
+
+
+	
+
 
 }
