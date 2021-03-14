@@ -9,7 +9,6 @@ private String codigoReserva;
     private Date fechaInicio;
     private Date fechaFinal;
     private String plan;
-    String codigoEmpleado;
     private String codigoHabitaciones[];
 
     public reserva(String cedula, String codigo, Date fechaInicio, Date fechaFinal, String plan) {
@@ -61,9 +60,7 @@ private String codigoReserva;
         this.plan = plan;
     }
 
-    public String getCodigoEmpleado() {
-        return codigoEmpleado;
-    }
+    
 
     public void cambiarHabitaciones(String codigoHabitacionN,String codigoHabitacionV)throws ECodigoInvalido{
         boolean b=false;
